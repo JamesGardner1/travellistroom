@@ -14,13 +14,13 @@ import java.util.List;
 public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.WishListViewHolder> {
 
     // List of Places
-    private List<Place> data;
+    private List<Place> mPlaces;
 
     private WishListClickListener listener;
 
-    public WishListAdapter(List<Place> data, WishListClickListener listener) {
+    public WishListAdapter(List<Place> places, WishListClickListener listener) {
         this.listener = listener;
-        this.data = data;
+        this.mPlaces = places;
     }
 
     static class WishListViewHolder extends RecyclerView.ViewHolder implements
@@ -70,7 +70,7 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.WishLi
     @Override
     public void onBindViewHolder(@NonNull WishListAdapter.WishListViewHolder holder, int position) {
 
-        Place place = data.get(position);
+        Place place = mPlaces.get(position);
         holder.nameTextView.setText(place.getName());
         holder.reasonTextView.setText(place.getReason());
         holder.dateCreatedTextView.setText("Created on " + place.getDateCreated());
@@ -79,6 +79,6 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.WishLi
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return mPlaces.size();
     }
 }

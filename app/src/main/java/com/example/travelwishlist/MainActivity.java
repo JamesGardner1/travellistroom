@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements WishListClickList
     private EditText mNewPlaceReasonEditText;
 
     private PlaceViewModel mPlaceModel;
+    private List<Place> mPlaces;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

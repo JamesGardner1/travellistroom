@@ -14,14 +14,22 @@ import java.util.List;
 @Dao
 public interface PlaceDAO {
 
-    @Query("SELECT * FROM Place ORDER BY name DESC LIMIT: results")
-    LiveData<List<Place>> getPlaces(int results);
+    @Query("SELECT * FROM Place ORDER BY name")
+    LiveData<List<Place>> getAllPlaces();
 
     @Insert
     void insert(Place place);
 
     @Delete
     void delete(Place place);
+
+    // Insert in array of Places
+    @Insert
+    void insert(Place... places);
+
+    //Delete in array of Places
+    @Delete
+    void delete(Place... places);
 
 
 

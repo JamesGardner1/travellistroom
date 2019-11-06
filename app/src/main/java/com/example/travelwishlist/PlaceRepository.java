@@ -7,52 +7,64 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+
+// Manages the place data source
+
 public class PlaceRepository {
 
-    private PlaceDAO mPlaceDAO;
+    private PlaceDAO placeDAO;
+    private LiveData<List<Place>> allPlaces;
 
     public PlaceRepository(Application application) {
         PlaceDatabase db = PlaceDatabase.getDatabase(application);
-        mPlaceDAO = db.placeDAO();
+        placeDAO = db.placeDAO();
+        allPlaces = placeDAO.getAllPlaces();
     }
 
-    public LiveData<List<Place>> getPlaces(int results) {
-        return mPlaceDAO.getPlaces(results);
+    public LiveData<List<Place>> getAllPlaces() {
+        return allPlaces;
     }
 
     public void insert(Place place){
-        new InsertPlaceAsyncTask(mPlaceDAO).execute(place);
+        new InsertPlaceAsyncTask(placeDAO).execute(place);
     }
 
     public void delete(Place place) {
-        new DeletePlaceAsyncTask(mPlaceDAO).execute(place);
+        new DeletePlaceAsyncTask(placeDAO).execute(place);
+    }
+
+    public void insert(Place... places) { new InsertPlaceAsyncTask(placeDAO).execute(places);
+    }
+
+    public void delete(Place... places) { new DeletePlaceAsyncTask(placeDAO).execute(places);
     }
 
 
-    private static class InsertPlaceAsyncTask extends AsyncTask<Place, Void, Void> {
-        PlaceDAO dao;
 
-        public InsertPlaceAsyncTask(PlaceDAO dao) {
-            this.dao = dao;
+    private static class InsertPlaceAsyncTask extends AsyncTask<Place, Void, Void> {
+        private PlaceDAO asyncTaskDAO;
+
+        InsertPlaceAsyncTask(PlaceDAO placeDAO) {
+            this.asyncTaskDAO = placeDAO;
         }
 
         @Override
         protected Void doInBackground(Place... places) {
-            dao.insert(places[0]);
+            asyncTaskDAO.insert(places);
             return null;
         }
     }
 
     private static class DeletePlaceAsyncTask extends AsyncTask<Place, Void, Void> {
-        PlaceDAO dao;
+        private PlaceDAO asyncTaskDAO;
 
-        public DeletePlaceAsyncTask(PlaceDAO dao) {
-            this.dao = dao;
+        public DeletePlaceAsyncTask(PlaceDAO placeDAO) {
+            this.asyncTaskDAO = placeDAO;
         }
 
         @Override
         protected Void doInBackground(Place... places) {
-            dao.delete(places[0]);
+            asyncTaskDAO.delete(places);
             return null;
         }
     }
